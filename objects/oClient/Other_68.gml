@@ -2,6 +2,15 @@ var r = get_response(async_load);
 if (r == -1) { exit; }
 switch (r[$ "type"]) {
     case "MovePlayer":
+		var name = r[$ "username"];
+		var xz = r[$ "x"];
+		var yz = r[$ "y"];
+		with (oSlave) {
+		    if (username == name) {
+			    xx = xz;
+			    yy = yz;
+			}
+		}
 		//if (!instance_exists(oSlave)) { break; }
 		//oSlave.xx = r[$ "x"];
 		//oSlave.yy = r[$ "y"];

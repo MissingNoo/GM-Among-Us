@@ -1,1 +1,1 @@
-prop_draw();
+draw_self();

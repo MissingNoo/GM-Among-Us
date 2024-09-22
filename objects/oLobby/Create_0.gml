@@ -1,3 +1,23 @@
+if (instance_number(oLobby) > 1) { instance_destroy(); }
+#region GameVars
+player_speed = 3;
+dbg_view("Lobby", false);
+dbg_section("Vars");
+dbg_button("Save", function() { debug_save(); });
+dbg_same_line();
+dbg_button("Load", function() { debug_load(); });
+var names = struct_get_names(self);
+for (var i = 0; i < array_length(names); ++i) {
+	//if (array_get_index(skip, names[i]) != -1) { continue; }
+	if (is_method(self[$ names[i]])) { continue; }
+	if (is_string(self[$ names[i]])) {
+		dbg_text_input(ref_create(self, names[i]), names[i]);
+	}
+	if (is_real(self[$ names[i]])) { 
+		dbg_slider_int(ref_create(self, names[i]), 1, 100, names[i]);
+	}
+}
+#endregion
 #region Functions
 function lobby_button(){}
 
