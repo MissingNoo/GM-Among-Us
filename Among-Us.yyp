@@ -99,7 +99,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.800.0.618",
+    "IDEVersion":"2024.800.0.613",
   },
   "name":"Among-Us",
   "resources":[
@@ -570,7 +570,7 @@
     {"id":{"name":"__shd_scribble_bake_outline_8dir","path":"shaders/__shd_scribble_bake_outline_8dir/__shd_scribble_bake_outline_8dir.yy",},},
     {"id":{"name":"__shd_scribble_bake_shadow","path":"shaders/__shd_scribble_bake_shadow/__shd_scribble_bake_shadow.yy",},},
     {"id":{"name":"__shd_scribble","path":"shaders/__shd_scribble/__shd_scribble.yy",},},
-    {"id":{"name":"gh","path":"sprites/gh/gh.yy",},},
+    {"id":{"name":"aasd","path":"sprites/aasd/aasd.yy",},},
     {"id":{"name":"PC_Computer___Among_Us___The_Skeld_Admin","path":"sprites/PC_Computer___Among_Us___The_Skeld_Admin/PC_Computer___Among_Us___The_Skeld_Admin.yy",},},
     {"id":{"name":"PC_Computer___Among_Us___The_Skeld_Reactor_Security_Engines_Hallway_Cross","path":"sprites/PC_Computer___Among_Us___The_Skeld_Reactor_Security_Engines_Hallway_Cross/PC_Computer___Among_Us___The_Skeld_Reactor_Security_Engines_Hallway_Cross.yy",},},
     {"id":{"name":"sBlank","path":"sprites/sBlank/sBlank.yy",},},
