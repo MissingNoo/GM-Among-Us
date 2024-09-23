@@ -17,32 +17,6 @@ function textbox(data = {
 	var value = variable_instance_get(data.instance, data.variable);
 	scribble($"[fa_center][fa_middle]{value != "" ? value : data.text}").draw(data.x, data.y);
 }
-function debug_save() {
-	var names = struct_get_names(self);
-	ini_open("debug.ini");
-	for (var i = 0; i < array_length(names); ++i) {
-		if (array_get_index(skip, names[i]) != -1) { continue; }
-		if (is_method(self[$ names[i]])) { continue; }
-		ini_write_string("Debug", names[i], string(self[$ names[i]]));
-	}
-	ini_close();
-}
-
-function debug_load() {
-	var names = struct_get_names(self);
-	ini_open("debug.ini");
-	for (var i = 0; i < array_length(names); ++i) {
-		if (array_get_index(skip, names[i]) != -1) { continue; }
-		if (is_method(self[$ names[i]])) { continue; }
-		try {
-			self[$ names[i]] = real(ini_read_real("Debug", names[i], 1));
-		}
-		catch (err) {
-			self[$ names[i]] = ini_read_string("Debug", names[i], "");
-		}
-	}
-	ini_close();
-}
 #endregion
 gw = global.__Networking.gw;
 gh = global.__Networking.gh;
@@ -76,7 +50,7 @@ for (var i = 0; i < array_length(names); ++i) {
 		dbg_slider_int(ref_create(self, names[i]), 1, 100, names[i]);
 	}
 }
-debug_load();
+debug_load(self, skip);
 keyboard_string = username;
 if (global.username != "" and global.password != "") {
 	//sendMessageNew("Login", {username : global.username, password : global.password});

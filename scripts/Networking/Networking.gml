@@ -76,3 +76,30 @@ function networking_button(data = {
 		data.func();
 	}
 }
+
+function debug_save(selff) {
+	var names = struct_get_names(selff);
+	ini_open("debug.ini");
+	for (var i = 0; i < array_length(names); ++i) {
+		//if (array_contains(skip, names[i])) { continue; }
+		if (is_method(selff[$ names[i]])) { continue; }
+		ini_write_string("Debug", names[i], string(selff[$ names[i]]));
+	}
+	ini_close();
+}
+
+function debug_load(selff, skip) {
+	var names = struct_get_names(selff);
+	ini_open("debug.ini");
+	for (var i = 0; i < array_length(names); ++i) {
+		if (array_contains(skip, names[i])) { continue; }
+		if (is_method(selff[$ names[i]])) { continue; }
+		try {
+			selff[$ names[i]] = real(ini_read_real("Debug", names[i], 1));
+		}
+		catch (err) {
+			selff[$ names[i]] = ini_read_string("Debug", names[i], "");
+		}
+	}
+	ini_close();
+}

@@ -1,1 +1,1 @@
-debug_save();
+debug_save(selff);

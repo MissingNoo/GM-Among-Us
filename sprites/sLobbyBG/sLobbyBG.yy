@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"Rooms",
-    "path":"folders/Sprites/Rooms.yy",
+    "name":"Lobby",
+    "path":"folders/Sprites/Rooms/Lobby.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

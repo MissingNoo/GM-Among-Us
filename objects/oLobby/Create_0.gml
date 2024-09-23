@@ -284,8 +284,8 @@ fsm.add("OnLobby", {
 			},
 			force_sprite : oLobby.ishost
 		});
-		var _text = string_replace(players, "[", "[[");
-		scribble(_text).scale(2).draw(10, 60);
+		//var _text = string_replace(players, "[", "[[");
+		//scribble(_text).scale(2).draw(10, 60);
 	}
 });
 
