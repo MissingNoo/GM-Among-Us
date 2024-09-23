@@ -1,1 +1,2 @@
-debug_save(selff);
+//feather disable all
+debug_save(self);

@@ -1,11 +1,23 @@
+//feather disable all
 global.__Networking = {};
 global.__Networking.ip = "127.0.0.1";
 global.__Networking.port = 21320;
 global.__Networking.MX = 0;
 global.__Networking.MY = 0;
 global.__Networking.left_click = false;
+global.__Networking.gw = display_get_gui_width();
+global.__Networking.gh = display_get_gui_height();
 #macro _NW global.__Networking
 
+_NW.sprite_button = function(spr, img, x, y, xs, ys) {
+	draw_sprite_ext(spr, img, x, y, xs, ys, 0, c_white, 1);
+	var sprw = (sprite_get_width(spr) * xs) / 2;
+	var sprh = (sprite_get_height(spr) * ys) / 2;
+	if (_NW.left_click and point_in_rectangle(_NW.MX, _NW.MY, x - sprw, y - sprh, x + sprw, y + sprh)) {
+	    return true;
+	}
+	return false;
+}
 function get_response(async_load) {
 	//var type_event = ds_map_find_value(async_load, "type");
 	var buffer;

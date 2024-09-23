@@ -1,12 +1,5 @@
+//feather disable all
 if (instance_number(oClient) > 1) { instance_destroy(); }
-var fnts = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 :][\",}{-.";
-global.font = font_add_sprite_ext(sFont, fnts, true, 1);
-scribble_font_bake_outline_4dir("sFont", "sOFont", c_black, true);
-scribble_font_scale("sFont", 0.25);
-scribble_font_force_bilinear_filtering("sFont", true);
-scribble_font_force_bilinear_filtering("sOFont", false);
-global.__Networking.gw = display_get_gui_width();
-global.__Networking.gh = display_get_gui_height();
 gw = global.__Networking.gw;
 gh = global.__Networking.gh;
 showinfo = false;

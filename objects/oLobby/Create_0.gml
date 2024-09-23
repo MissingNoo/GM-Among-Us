@@ -1,16 +1,30 @@
+//feather disable all
 if (instance_number(oLobby) > 1) { instance_destroy(); }
+gw = global.__Networking.gw;
+gh = global.__Networking.gh;
+#region lobby list
+maxplayers = 4;
+list_x = gw / 2;
+list_y = 110;
+list_offset = 50;
+list_x_scale = 27;
+list_y_scale = 1;
+#endregion
 #region Player Menu
 show_players = false;
-plist_position = 0;
+plist_y_position = gh / 2;
+plist_x_lerp_max = 100;
+plist_x_lerp_min = -100;
+plist_x_position = plist_x_lerp_min;
+plist_x_lerp = plist_x_lerp_min;
 show_button_y = 0;
+plist_x_scale = 4;
+plist_y_scale = 10;
 #endregion
 #region GameVars
 player_speed = 3;
 dbg_view("Lobby", false);
 dbg_section("Vars");
-dbg_button("Save", function() { debug_save(); });
-dbg_same_line();
-dbg_button("Load", function() { debug_load(); });
 var names = struct_get_names(self);
 for (var i = 0; i < array_length(names); ++i) {
 	//if (array_get_index(skip, names[i]) != -1) { continue; }
@@ -28,8 +42,6 @@ function lobby_button(){}
 
 #endregion
 #region Basic variables
-gw = global.__Networking.gw;
-gh = global.__Networking.gh;
 lobbyname = "";
 rooms = [];
 selectedroom = -1;
@@ -43,6 +55,9 @@ fsm = new SnowState("Rooms");
 fsm.add("Rooms", {
 	enter : function() {
 		sendMessageNew("ListLobbies");
+		if (array_length(rooms) > 0) {
+			rooms[1] = rooms[0];
+		}
 		selectedroom = 0;
 		reloadcooldown = 60 * 5;
 	},
@@ -69,7 +84,7 @@ fsm.add("Rooms", {
 			_y : 40,
 			text : "Join",
 			func: function(){
-				if (oLobby.selectedroom != -1 and oLobby.fsm.get_current_state() != "JoiningLobby") {
+				if (oLobby.selectedroom != -1 and oLobby.fsm.get_current_state() != "JoiningLobby" and oLobby.rooms[oLobby.selectedroom].totalplayers < oLobby.maxplayers) {
 					oLobby.fsm.change("JoiningLobby");
 				}
 			}
@@ -88,11 +103,13 @@ fsm.add("Rooms", {
 		var offset = 0;
 		for (var i = 0; i < array_length(rooms); i++) {
 			var color = selectedroom == i ? "c_yellow" : "c_white";
-			rooms[1] = rooms[0];
-			draw_sprite_ext(sNetworkingHud, 0, gw/2, 110 + offset, 30, 1.25, 0, c_white, 1);
-			scribble($"[{color}][fa_middle][fa_left]{rooms[i].name}").scale(3).draw(gw/2 - 700, 110 + offset);
-			scribble($"[fa_middle][fa_right][{rooms[i].protected ? sprite_get_name(sLockLobby) : sprite_get_name(sNBlank)}] [{color}]{rooms[i].totalplayers}/2").scale(3).draw(gw/2 + 700, 110 + offset);
-			offset += 65;
+			var spr = sNetworkingHud;
+			var sprw = (sprite_get_width(spr) * list_x_scale) / 2;
+			var sprh = (sprite_get_height(spr) * list_y_scale) / 2;
+			draw_sprite_ext(spr, 0, list_x, list_y + offset, list_x_scale, list_y_scale, 0, c_white, 1);
+			scribble($"[{color}][fa_middle][fa_left]{rooms[i].name}").scale(1).draw(list_x - sprw + 20, list_y + offset);
+			scribble($"[fa_middle][fa_right][{rooms[i].protected ? sprite_get_name(sLockLobby) : sprite_get_name(sNBlank)}] [{color}]{rooms[i].totalplayers}/{maxplayers}").scale(1).draw(list_x + sprw - 20, list_y + offset);
+			offset += list_offset;
 		}
 	}
 });
@@ -141,10 +158,10 @@ fsm.add_child("Rooms", "CreateLobby", {
 		_y += 65;
 		scribble("[fa_center][fa_middle]Name").scale(2.5).draw(_x, _y);
 		_y += 40;
-		var color = editing == 0 ? c_purple : c_white;
+		var color = editing == 0 ? c_yellow : c_white;
 		draw_roundrect_color_ext(_x - _rw, _y - _rh, _x + _rw, _y + _rh, 5, 5, color, color, true);
 		scribble($"[fa_center][fa_middle]{lobbyname}").scale(2.5).draw(_x, _y);
-		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
+		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and _NW.left_click) {
 			editing = 0;
 			keyboard_string = lobbyname;
 		}
@@ -152,7 +169,7 @@ fsm.add_child("Rooms", "CreateLobby", {
 		_y += 50;
 		scribble("[fa_center][fa_middle]Password").scale(2.5).draw(_x, _y);
 		_y += 40;
-		color = editing == 1 ? c_purple : c_white;
+		color = editing == 1 ? c_yellow : c_white;
 		draw_roundrect_color_ext(_x - _rw, _y - _rh, _x + _rw, _y + _rh, 5, 5, color, color, true);
 		scribble($"[fa_center][fa_middle]{lobbypass}").scale(2.5).draw(_x, _y);
 		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
@@ -190,7 +207,7 @@ fsm.add_child("Rooms", "JoiningLobby", {
 		keyboard_string = "";
 		editing = 1;
 		if (!rooms[selectedroom].protected) {
-			sendMessageNew("JoinLobby", {name : lobbyname, password : lobbypass});
+			sendMessageNew("JoinLobby", {name : oLobby.lobbyname, password : oLobby.lobbypass});
 		}
 	},
 	step : function() {
@@ -230,7 +247,7 @@ fsm.add_child("Rooms", "JoiningLobby", {
 		_y += 65;
 		scribble("[fa_center][fa_middle]Password").scale(2.5).draw(_x, _y);
 		_y += 40;
-		color = editing == 1 ? c_purple : c_white;
+		color = editing == 1 ? c_yellow : c_white;
 		draw_roundrect_color_ext(_x - _rw, _y - _rh, _x + _rw, _y + _rh, 5, 5, color, color, true);
 		scribble($"[fa_center][fa_middle]{lobbypass}").scale(2.5).draw(_x, _y);
 		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
@@ -244,7 +261,7 @@ fsm.add_child("Rooms", "JoiningLobby", {
 			_y : _y,
 			text : "Join",
 			func : function(){
-				sendMessageNew("JoinLobby", {name : lobbyname, password : lobbypass});
+				sendMessageNew("JoinLobby", {name : oLobby.lobbyname, password : oLobby.lobbypass});
 			}
 		});
 		networking_button({
@@ -265,13 +282,35 @@ fsm.add("OnLobby", {
 	step : function() {
 	},
 	draw : function() {
+		#region Player List
+		var slistscalex = ((sprite_get_width(sNetworkingHud) * plist_x_scale) / 2);
+		var slistscaley = ((sprite_get_height(sNetworkingHud) * plist_y_scale) / 2);
+		if (_NW.sprite_button(sNLateralMenu, 0, gw - clamp(plist_x_position + slistscalex, 0, infinity), plist_y_position, 1, 1)) {
+		    show_players = !show_players;
+			if (show_players) {
+			    plist_x_lerp = plist_x_lerp_max;
+			}
+			else {
+				plist_x_lerp = plist_x_lerp_min;
+			}
+		}
+		draw_sprite_ext(sNetworkingHud, 0, gw - plist_x_position, plist_y_position, plist_x_scale, plist_y_scale, 0, c_white, 1);
+		var poff = 0;
+		for (var i = 0; i < array_length(players); ++i) {
+			if (!is_struct(players[i])) { continue; }
+			var str = players[i][$ "username"];
+		    scribble(str).draw(gw - plist_x_position - slistscalex + 10, plist_y_position - slistscaley + 10 + poff);
+			poff += string_height(str) + 2;
+		}
+		#endregion
+		
 		networking_button({
 			_x : gw - 120,
 			_y : 40,
 			text: "Leave",
 			func: function(){
 				sendMessageNew("LeaveLobby");
-				room_goto(rLobby);
+				room_goto(Room1);
 			}
 		});
 		networking_button({

@@ -1,3 +1,4 @@
+// feather disable all
 _NW.MX = _NW.MX;
 _NW.MY = _NW.MY;
 switch (selected) {

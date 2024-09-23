@@ -1,4 +1,8 @@
-skip = ["skip"];
+//feather disable all
+skip = ["skip", "username", "password"];
+if (oClient.loggedin) {
+    instance_destroy();
+}
 #region Functions
 function textbox(data = {
 	x: 0,
@@ -20,18 +24,20 @@ function textbox(data = {
 #endregion
 gw = global.__Networking.gw;
 gh = global.__Networking.gh;
-selected = 0;
+selected = -1;
 #region Vars
-username = "";
-password = "";
-form_scale_x = 1;
-form_scale_y = 1;
-add_offset = 10;
+username = global.username;
+password = global.password;
+form_x = 200;
+form_y = 150;
+form_scale_x = 5;
+form_scale_y = 4;
+add_offset = 34;
 title_scale = 1;
-title_offset = 1;
+title_offset = 10;
 text_scale = 1;
-button_offset = 1;
-button_yoffset = 1;
+button_offset = 54;
+button_yoffset = 20;
 #endregion
 #region Debug
 dbg_view("LoginForm", false);
@@ -47,11 +53,10 @@ for (var i = 0; i < array_length(names); ++i) {
 		dbg_text_input(ref_create(self, names[i]), names[i]);
 	}
 	if (is_real(self[$ names[i]])) { 
-		dbg_slider_int(ref_create(self, names[i]), 1, 100, names[i]);
+		dbg_slider_int(ref_create(self, names[i]), 1, 300, names[i]);
 	}
 }
-debug_load(self, skip);
-keyboard_string = username;
+//debug_load(self, skip);
 if (global.username != "" and global.password != "") {
 	//sendMessageNew("Login", {username : global.username, password : global.password});
 }

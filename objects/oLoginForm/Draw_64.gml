@@ -1,28 +1,9 @@
-networking_button({
-	_x : 10,
-	_y : 60,
-	text: "Login1",
-	func: function(){
-		global.username = "Air";
-		global.password = "123";
-		sendMessageNew("Login", {username : global.username, password : global.password});
-	}
-});
-networking_button({
-	_x : 10,
-	_y : 90,
-	text: "Login2",
-	func: function(){
-		global.username = "A";
-		global.password = "123";
-		sendMessageNew("Login", {username : global.username, password : global.password});
-	}
-});
-
-draw_sprite_ext(sNetworkingHud, 0, gw / 2, gh / 2, form_scale_x, form_scale_y, 0, c_white, 1);
+//feather disable all
 var title_start_offset = (sprite_get_height(sNetworkingHud) * form_scale_y) / 2;
-var _x = gw / 2;
-var _y = gh / 2 + title_offset - title_start_offset;
+var _x = gw - form_x;
+var _y = gh  - form_y;
+draw_sprite_ext(sNetworkingHud, 0, _x, _y, form_scale_x, form_scale_y, 0, c_white, 1);
+_y += title_offset - title_start_offset;
 scribble("[fa_center][fa_top]Login").scale(title_scale).draw(_x, _y);
 _y += add_offset;
 textbox({

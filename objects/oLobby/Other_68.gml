@@ -13,17 +13,15 @@ switch (r[$ "type"]) {
 		var remove = [];
 		for (var i = 0; i < array_length(players); ++i) {
 			array_push(remove, players[i][$ "username"]);
-			with (oSlave) {
-				if (!array_contains(remove, username)) {
-				    instance_destroy();
-				}
-			}
 		}
 		for (var i = 0; i < array_length(players); ++i) {
 		    if (players[i][$ "username"] == global.username) { continue; }
 			var exists = false;
 			var name = players[i][$ "username"];
 			with (oSlave) {
+				if (!array_contains(remove, username)) {
+					instance_destroy();
+				}
 			    if (username == name) {
 				    exists = true;
 				}

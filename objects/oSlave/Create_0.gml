@@ -1,6 +1,8 @@
 image_xscale = 0.3;
 image_yscale = 0.3;
-x = oPlayer.x;
-y = oPlayer.y;
-xx = x;
-yy = y;
+x = -999;
+y = 0;
+hspd = 0;
+vspd = 0;
+xx = -999;
+yy = 0;

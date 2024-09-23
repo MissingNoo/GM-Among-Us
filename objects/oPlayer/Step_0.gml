@@ -10,12 +10,14 @@ if (hspd < 0) {
 else if (hspd > 0) {
     image_xscale = 0.3;
 }
+if (input_check_pressed("left") or input_check_pressed("right") or input_check_pressed("down") or input_check_pressed("up")) {
+    sendMessageNew("MovePlayer", {x, y, hspd, vspd});
+}
+if (input_check_released("left") or input_check_released("right") or input_check_released("down") or input_check_released("up")) {
+    sendMessageNew("MovePlayer", {x, y, hspd, vspd});
+}
 if (leftright != 0 or updown != 0) {
     sprite_index = sWalk;
-	if (sendtimer == 0) {
-		sendtimer = 20;
-	    sendMessageNew("MovePlayer", {x, y});
-	}
 }
 else {
 	sprite_index = sIdle;
