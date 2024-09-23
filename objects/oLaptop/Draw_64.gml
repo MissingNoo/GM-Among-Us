@@ -5,7 +5,7 @@ var start_x = gw / 2 - tabsx;
 var tabo = 0;
 for (var i = 0; i < array_length(tabs); ++i) {
     draw_roundrect_color_ext(start_x - tabsw + tabo, gh / 2 - tabsh - tabsyo, start_x + tabsw + tabo, gh / 2 + tabsh - tabsyo, roundc, roundc, c_purple, c_purple, false);
-	if (left_click and point_in_rectangle(MX, MY, start_x - tabsw + tabo, gh / 2 - tabsh - tabsyo, start_x + tabsw + tabo, gh / 2 + tabsh - tabsyo)) {
+	if (_NW.left_click and point_in_rectangle(_NW.MX, _NW.MY, start_x - tabsw + tabo, gh / 2 - tabsh - tabsyo, start_x + tabsw + tabo, gh / 2 + tabsh - tabsyo)) {
 	    selectedtab = i;
 	}
 	var color = selectedtab == i ? "c_red" : "c_white";

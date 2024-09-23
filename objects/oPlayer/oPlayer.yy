@@ -38,6 +38,9 @@
     "name":"sIdle",
     "path":"sprites/sIdle/sIdle.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"sIdle",
+    "path":"sprites/sIdle/sIdle.yy",
+  },
   "visible":true,
 }

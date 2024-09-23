@@ -10,7 +10,7 @@ function textbox(data = {
 	color : c_white,
 	func : function() {}
 }) {
-	if (left_click and point_in_rectangle(MX, MY, data.x - (data.width / 2), data.y - 8, data.x + (data.width / 2), data.y + 8)) {
+	if (_NW.left_click and point_in_rectangle(_NW.MX, _NW.MY, data.x - (data.width / 2), data.y - 8, data.x + (data.width / 2), data.y + 8)) {
 	    data.func();
 	}
 	draw_rectangle_color(data.x - (data.width / 2), data.y - 8, data.x + (data.width / 2), data.y + 8, data.color, data.color, data.color, data.color, true);

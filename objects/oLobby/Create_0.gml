@@ -1,4 +1,9 @@
 if (instance_number(oLobby) > 1) { instance_destroy(); }
+#region Player Menu
+show_players = false;
+plist_position = 0;
+show_button_y = 0;
+#endregion
 #region GameVars
 player_speed = 3;
 dbg_view("Lobby", false);
@@ -86,7 +91,7 @@ fsm.add("Rooms", {
 			rooms[1] = rooms[0];
 			draw_sprite_ext(sNetworkingHud, 0, gw/2, 110 + offset, 30, 1.25, 0, c_white, 1);
 			scribble($"[{color}][fa_middle][fa_left]{rooms[i].name}").scale(3).draw(gw/2 - 700, 110 + offset);
-			scribble($"[fa_middle][fa_right][{rooms[i].protected ? sprite_get_name(sLockLobby) : sprite_get_name(sBlank)}] [{color}]{rooms[i].totalplayers}/2").scale(3).draw(gw/2 + 700, 110 + offset);
+			scribble($"[fa_middle][fa_right][{rooms[i].protected ? sprite_get_name(sLockLobby) : sprite_get_name(sNBlank)}] [{color}]{rooms[i].totalplayers}/2").scale(3).draw(gw/2 + 700, 110 + offset);
 			offset += 65;
 		}
 	}
@@ -139,7 +144,7 @@ fsm.add_child("Rooms", "CreateLobby", {
 		var color = editing == 0 ? c_purple : c_white;
 		draw_roundrect_color_ext(_x - _rw, _y - _rh, _x + _rw, _y + _rh, 5, 5, color, color, true);
 		scribble($"[fa_center][fa_middle]{lobbyname}").scale(2.5).draw(_x, _y);
-		if(point_in_rectangle(MX, MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
+		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
 			editing = 0;
 			keyboard_string = lobbyname;
 		}
@@ -150,7 +155,7 @@ fsm.add_child("Rooms", "CreateLobby", {
 		color = editing == 1 ? c_purple : c_white;
 		draw_roundrect_color_ext(_x - _rw, _y - _rh, _x + _rw, _y + _rh, 5, 5, color, color, true);
 		scribble($"[fa_center][fa_middle]{lobbypass}").scale(2.5).draw(_x, _y);
-		if(point_in_rectangle(MX, MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
+		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
 			editing = 1;
 			keyboard_string = lobbypass;
 		}
@@ -228,7 +233,7 @@ fsm.add_child("Rooms", "JoiningLobby", {
 		color = editing == 1 ? c_purple : c_white;
 		draw_roundrect_color_ext(_x - _rw, _y - _rh, _x + _rw, _y + _rh, 5, 5, color, color, true);
 		scribble($"[fa_center][fa_middle]{lobbypass}").scale(2.5).draw(_x, _y);
-		if(point_in_rectangle(MX, MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
+		if(point_in_rectangle(_NW.MX, _NW.MY, _x - _rw, _y - _rh, _x + _rw, _y + _rh) and device_mouse_check_button_pressed(0, mb_left)) {
 			editing = 1;
 			keyboard_string = lobbypass;
 		}
@@ -260,21 +265,15 @@ fsm.add("OnLobby", {
 	step : function() {
 	},
 	draw : function() {
-		/// @instancevar {Any} players
-		/// @instancevar {Any} subimg
-		lobby_button(120, 40, "Leave", function(){
-			sendMessageNew("LeaveLobby");
-		}, [0.65, 1.50, 2]);
-		lobby_button(gw - 120, 40, "Select Character", function(){
-			/// @instancevar {Any} fsm
-			/// @instancevar {Any} wl
-			if (fsm.get_current_state() == "OnLobbyCharacter") {
-				wl[1] = wl[2];
+		networking_button({
+			_x : gw - 120,
+			_y : 40,
+			text: "Leave",
+			func: function(){
+				sendMessageNew("LeaveLobby");
+				room_goto(rLobby);
 			}
-			else {
-				fsm.change("OnLobbyCharacter");
-			}
-		}, [1.20, 1.50, 2]);
+		});
 		networking_button({
 			_x : gw - 120,
 			_y : 95, 
@@ -282,10 +281,8 @@ fsm.add("OnLobby", {
 			func : function(){
 				sendMessageNew("StartGame");
 			},
-			force_sprite : oLobby.ishost
+			enabled : oLobby.ishost
 		});
-		//var _text = string_replace(players, "[", "[[");
-		//scribble(_text).scale(2).draw(10, 60);
 	}
 });
 
@@ -297,13 +294,3 @@ fsm.add("OnStage",{
 	draw : function() {
 	}
 });
-
-/*
-fsm.add_child("Rooms", "CreateLobby", {
-	enter : function() {
-	},
-	step : function() {
-	},
-	draw : function() {
-	}
-}) */

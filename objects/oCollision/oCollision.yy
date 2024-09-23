@@ -27,7 +27,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"SCol",
+    "path":"sprites/SCol/SCol.yy",
+  },
   "spriteMaskId":null,
-  "visible":true,
+  "visible":false,
 }

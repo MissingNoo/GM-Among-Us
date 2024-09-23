@@ -1,9 +1,11 @@
 global.__Networking = {};
-global.serverip = "127.0.0.1";
-global.port = 21320;
-#macro MX device_mouse_x_to_gui(0)
-#macro MY device_mouse_y_to_gui(0)
-#macro left_click device_mouse_check_button_pressed(0, mb_left)
+global.__Networking.ip = "127.0.0.1";
+global.__Networking.port = 21320;
+global.__Networking.MX = 0;
+global.__Networking.MY = 0;
+global.__Networking.left_click = false;
+#macro _NW global.__Networking
+
 function get_response(async_load) {
 	//var type_event = ds_map_find_value(async_load, "type");
 	var buffer;
@@ -21,12 +23,11 @@ function sendMessageNew(type, data = {}){
 	data.username = global.username;
 	data.type = type;
 	var _json = json_stringify(data);
-	//show_debug_message($"Sending data: {json_stringify(data, true)}");
 	buffer_write(oClient.clientBuffer, buffer_text, _json);	
-	network_send_udp_raw(oClient.client, global.serverip, global.port, oClient.clientBuffer, buffer_tell(oClient.clientBuffer));
+	network_send_udp_raw(oClient.client, _NW.ip, _NW.port, oClient.clientBuffer, buffer_tell(oClient.clientBuffer));
 }
 
-global.__Networking.basestruct = {
+_NW.basestruct = {
 	_x : 0,
 	_y : 0,
 	text : "",
@@ -36,6 +37,7 @@ global.__Networking.basestruct = {
 	force_sprite : false,
 	enterfunc : function(){}
 };
+
 function networking_button(data = {
 	_x : 0,
 	_y : 0,
@@ -59,7 +61,7 @@ function networking_button(data = {
 	var sprite_hs = th / 5;
 	var _w = (sprite_get_width(sHudButton) * sprite_ws) / 2;
 	var _h = (sprite_get_height(sHudButton) * sprite_hs) / 2;
-	var mouse_on = point_in_rectangle(MX, MY, data._x - _w, data._y - _h, data._x + _w, data._y + _h);
+	var mouse_on = point_in_rectangle(_NW.MX, _NW.MY, data._x - _w, data._y - _h, data._x + _w, data._y + _h);
 	if (mouse_on) { data.enterfunc(); }
 	var spr = mouse_on;
 	if (data.force_sprite) {

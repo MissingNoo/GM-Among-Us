@@ -2,7 +2,6 @@ if (instance_number(oClient) > 1) { instance_destroy(); }
 var fnts = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 :][\",}{-.";
 global.font = font_add_sprite_ext(sFont, fnts, true, 1);
 scribble_font_bake_outline_4dir("sFont", "sOFont", c_black, true);
-scribble_font_set_default("sFont");
 scribble_font_scale("sFont", 0.25);
 scribble_font_force_bilinear_filtering("sFont", true);
 scribble_font_force_bilinear_filtering("sOFont", false);
@@ -32,7 +31,7 @@ if(_timestate == time_source_state_initial or _timestate == time_source_state_st
 
 connected = -1;
 try {
-	connected = network_connect_raw(client, global.serverip, global.port);
+	connected = network_connect_raw(client, _NW.ip, _NW.port);
 	if (connected >= 0) {
 		reason = "Connection Sucessful";
 	}
